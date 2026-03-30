@@ -31,11 +31,15 @@ CREATE TABLE Event(
     Event_Coordinator_Name VARCHAR(50),
     FOREIGN KEY (Event_Coordinator_Name) REFERENCES Event_Coordinator(Name)
 );
+ALTER TABLE Event ADD COLUMN Approval_Status ENUM('Pending','Approved') DEFAULT 'Pending';
 
 CREATE TABLE Attendance(
-    Curr_Status ENUM('Marked','Not Marked'),
+    PRN VARCHAR(10),
     Event_Name VARCHAR(30),
+    Curr_Status ENUM('Marked','Not Marked'),
     Faculty_Name VARCHAR(50),
+    PRIMARY KEY (PRN, Event_Name),
+    FOREIGN KEY (PRN) REFERENCES Student(PRN),
     FOREIGN KEY (Event_Name) REFERENCES Event(Event_Name),
     FOREIGN KEY (Faculty_Name) REFERENCES Faculty(Name)
 );
@@ -47,6 +51,8 @@ CREATE TABLE Student_Participants_Event(
     FOREIGN KEY (PRN) REFERENCES Student(PRN),
     FOREIGN KEY (Event_Name) REFERENCES Event(Event_Name)
 );
+ALTER TABLE Student_Participants_Event
+ADD COLUMN Status ENUM('Pending','Approved','Rejected') DEFAULT 'Pending';
 
 CREATE TABLE Student_Organises_Event(
     PRN VARCHAR(10),
